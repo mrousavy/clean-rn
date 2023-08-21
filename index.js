@@ -18,11 +18,16 @@ console.log(`clean-rn: Cleaning React Native caches for ${appRoot}..`)
 // npm
 rm(join(appRoot, 'node_modules'))
 
-rm(join(appRoot, 'yarn.lock'))
-shell.exec('yarn cache clean')
-
-rm(join(appRoot, 'package-lock.json'))
-shell.exec('npm cache clean --force')
+if(fs.existsSync(join(appRoot, 'package-lock.json'))) {
+  shell.exec('npm cache clean --force')
+  rm(join(appRoot, 'package-lock.json'))
+} else if(fs.existsSync(join(appRoot, 'yarn.lock'))) {
+  shell.exec('yarn cache clean')
+  rm(join(appRoot, 'yarn.lock'))
+} else if(fs.existsSync(join(appRoot, 'pnpm-lock.yaml'))) {
+  shell.exec('pnpm store prune')
+  rm(join(appRoot, 'pnpm-lock.yaml'))
+}
 
 // android
 const androidPaths=[
