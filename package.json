@@ -1,0 +1,30 @@
+{
+  "name": "clean-rn",
+  "version": "1.0.0",
+  "description": "Clean all React Native caches in your project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrousavy/clean-rn.git"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "clean",
+    "cli",
+    "tool",
+    "cache",
+    "android",
+    "ios",
+    "build"
+  ],
+  "author": "mrousavy (me@mrousavy.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrousavy/clean-rn/issues"
+  },
+  "homepage": "https://github.com/mrousavy/clean-rn#readme"
+}
