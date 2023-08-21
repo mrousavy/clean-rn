@@ -1,6 +1,6 @@
 {
   "name": "clean-rn",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Clean all React Native caches in your project.",
   "main": "index.js",
   "bin": {
