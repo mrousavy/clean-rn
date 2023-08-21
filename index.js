@@ -45,6 +45,7 @@ shell.exec(join(appRoot, 'android', 'gradlew clean'))
 const iosPaths=[
   'build',
   'Pods',
+  'Podfile.lock',
   'DerivedData',
 ]
 iosPaths.forEach((p) => rm(join(appRoot, 'ios', p)))
