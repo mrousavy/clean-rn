@@ -1,13 +1,13 @@
 #! /usr/bin/env node
-const shell = require('shelljs')
-const { path: appRoot } = require('app-root-path')
-const fs = require('fs')
-const os = require('os')
-const join = require('path').join
+const {exec} = require('shelljs')
+const {path: appRoot} = require('app-root-path')
+const {existsSync, rmSync} = require('fs')
+const {homedir} = require('os')
+const {join} = require('path')
 
 function rm(path) {
   try {
-    fs.rmSync(path, { recursive: true, force: true })
+    rmSync(path, { recursive: true, force: true })
   } catch (e) {
     console.warn(`Failed to delete ${path}, continuing..`)
   }
@@ -18,14 +18,14 @@ console.log(`clean-rn: Cleaning React Native caches for ${appRoot}..`)
 // npm
 rm(join(appRoot, 'node_modules'))
 
-if(fs.existsSync(join(appRoot, 'package-lock.json'))) {
-  shell.exec('npm cache clean --force')
+if(existsSync(join(appRoot, 'package-lock.json'))) {
+  exec('npm cache clean --force')
   rm(join(appRoot, 'package-lock.json'))
-} else if(fs.existsSync(join(appRoot, 'yarn.lock'))) {
-  shell.exec('yarn cache clean')
+} else if(existsSync(join(appRoot, 'yarn.lock'))) {
+  exec('yarn cache clean')
   rm(join(appRoot, 'yarn.lock'))
-} else if(fs.existsSync(join(appRoot, 'pnpm-lock.yaml'))) {
-  shell.exec('pnpm store prune')
+} else if(existsSync(join(appRoot, 'pnpm-lock.yaml'))) {
+  exec('pnpm store prune')
   rm(join(appRoot, 'pnpm-lock.yaml'))
 }
 
@@ -42,9 +42,9 @@ const androidPaths=[
 androidPaths.forEach((p) => rm(join(appRoot, 'android', p)))
 
 
-shell.exec(join(appRoot, 'android', 'gradlew --stop')) // stop gradle daemon
-rm(join(os.homedir(), '.gradle', 'caches'))
-shell.exec(join(appRoot, 'android', 'gradlew clean'))
+exec(join(appRoot, 'android', 'gradlew --stop')) // stop gradle daemon
+rm(join(homedir(), '.gradle', 'caches'))
+exec(join(appRoot, 'android', 'gradlew clean'))
 
 // ios
 const iosPaths=[
