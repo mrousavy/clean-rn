@@ -35,5 +35,6 @@ shell.exec("./android/gradlew cleanBuildCache")
 // ios
 rm(`${path}/ios/build`)
 rm(`${path}/ios/Pods`)
+rm(`${path}/ios/DerivedData`)
 
 console.log("Cleaned everything! Run:\n  - yarn/npm i\n  - cd ios && pod repo update && pod update\n..to reinstall everything!")
