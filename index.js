@@ -1,2 +1,7 @@
 #! /usr/bin/env node
-console.log("Hello world!")
+const shell = require('shelljs')
+const { path } = require('app-root-path')
+
+console.log("Hello " + path)
+
+shell.exec(`rm -rf ${path}/node_modules`)
