@@ -1,15 +1,38 @@
 #! /usr/bin/env node
-const {exec} = require('shelljs')
-const {path: appRoot} = require('app-root-path')
 const {existsSync, rmSync} = require('fs')
 const {homedir} = require('os')
 const {join} = require('path')
+const {execSync:exec} = require('child_process')
+const appRoot = process.cwd()
+
+function error(message) {
+  console.log('\x1b[31m%s\x1b[0m', message);
+}
+function hasReactNativeDependency() {
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(join(appRoot, 'package.json'), 'utf8'));
+    const dependencies = packageJson.dependencies || {};
+    const devDependencies = packageJson.devDependencies || {};
+    const hasReactNativeDependency = dependencies['react-native'] || devDependencies['react-native'];
+    return hasReactNativeDependency;
+  } catch (err) {
+    error(
+      'Could not parse package.json. make sure your terminal is at the root of your React Native project',
+    );
+    return false;
+  }
+}
+
+if (!hasReactNativeDependency()) {
+  error('This is not a React Native project');
+  process.exit(1);
+}
 
 function rm(path) {
   try {
     rmSync(path, { recursive: true, force: true })
   } catch (e) {
-    console.warn(`Failed to delete ${path}, continuing..`)
+    error(`Failed to delete ${path}, continuing..`)
   }
 }
 
