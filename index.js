@@ -1,7 +1,9 @@
 #! /usr/bin/env node
 const shell = require('shelljs')
 const { path } = require('app-root-path')
-const fs = require("fs")
+const fs = require('fs')
+const os = require('os')
+const join = require('path').join
 
 function rm(path) {
   try {
@@ -14,27 +16,36 @@ function rm(path) {
 console.log(`clean-rn: Cleaning React Native caches for ${path}..`)
 
 // npm
-rm(`${path}/node_modules`)
+rm(join(path, 'node_modules'))
 
-rm(`${path}/yarn.lock`)
-shell.exec("yarn cache clean")
+rm(join(path, 'yarn.lock'))
+shell.exec('yarn cache clean')
 
-rm(`${path}/package-lock.json`)
-shell.exec("npm cache clean --force")
+rm(join(path, 'package-lock.json'))
+shell.exec('npm cache clean --force')
 
 // android
-rm(`${path}/android/.gradle`)
-rm(`${path}/android/.idea`)
-rm(`${path}/android/.cxx`)
-rm(`${path}/android/build`)
-rm(`${path}/android/app/build`)
-rm(`${path}/android/app/.cxx`)
-rm(`$HOME/.gradle/caches`)
-shell.exec("./android/gradlew cleanBuildCache")
+const androidPaths=[
+  '.gradle',
+  '.idea',
+  '.cxx',
+  'build',
+  'build',
+  join('app', 'build'),
+  join('app', '.cxx'),
+]
+androidPaths.forEach((p) => rm(join(path, 'android', p)))
+
+
+shell.exec(join(path, 'android', 'gradlew --stop')) // stop gradle daemon
+rm(join(os.homedir(), '.gradle', 'caches'))
+shell.exec(join(path, 'android', 'gradlew clean'))
 
 // ios
-rm(`${path}/ios/build`)
-rm(`${path}/ios/Pods`)
-rm(`${path}/ios/DerivedData`)
-
-console.log("Cleaned everything! Run:\n  - yarn/npm i\n  - cd ios && pod repo update && pod update\n..to reinstall everything!")
+const iosPaths=[
+  'build',
+  'Pods',
+  'DerivedData',
+]
+iosPaths.forEach((p) => rm(join(path, 'ios', p)))
+console.log('Cleaned everything! Run:\n  - yarn/npm i\n  - cd ios && pod repo update && pod update\n..to reinstall everything!')
