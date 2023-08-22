@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-const {existsSync, rmSync} = require('fs')
+const {existsSync, rmSync, readFileSync} = require('fs')
 const {homedir} = require('os')
 const {join} = require('path')
 const {execSync:exec} = require('child_process')
@@ -10,7 +10,7 @@ function error(message) {
 }
 function hasReactNativeDependency() {
   try {
-    const packageJson = JSON.parse(fs.readFileSync(join(appRoot, 'package.json'), 'utf8'));
+    const packageJson = JSON.parse(readFileSync(join(appRoot, 'package.json'), 'utf8'));
     const dependencies = packageJson.dependencies || {};
     const devDependencies = packageJson.devDependencies || {};
     const hasReactNativeDependency = dependencies['react-native'] || devDependencies['react-native'];
