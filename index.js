@@ -23,9 +23,33 @@ function hasReactNativeDependency() {
   }
 }
 
+function isWatchmanAvailable() {
+  try {
+    exec('watchman --version');
+    if (existsSync(join(appRoot, '.watchmanconfig'))) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
 if (!hasReactNativeDependency()) {
   error('This is not a React Native project');
   process.exit(1);
+}
+
+// Check for watchman availability and clear its watches if possible
+if (isWatchmanAvailable()) {
+  try {
+    exec('watchman watch-del-all');
+    console.log('Watchman caches cleared.');
+  } catch (e) {
+    error('Failed to clear Watchman caches, continuing...');
+  }
+} else {
+  console.log('Watchman is not available or not configured for this project, skipping Watchman cache clear.');
 }
 
 function rm(path) {
