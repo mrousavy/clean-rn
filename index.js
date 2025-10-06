@@ -58,7 +58,6 @@ const androidPaths=[
   '.idea',
   '.cxx',
   'build',
-  'build',
   join('app', 'build'),
   join('app', '.cxx'),
 ]
